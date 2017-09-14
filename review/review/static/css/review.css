@@ -1,0 +1,64 @@
+/* CSS for ReviewXBlock */
+body {
+  margin: 2em;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.47em;
+  font-weight: bold;
+  margin: 5px 5px 5px 5px;
+  padding: .2em .5em .2em 0;
+}
+
+.button:focus {
+  background-color: #eee;
+}
+.button--active,
+.button--active:focus{
+  background-color: #ccc;
+}
+
+.button:before {
+  content: "+";
+  display: inline-block;
+  width: 1em;
+}
+
+.button--active:before {
+  content: "-";
+} 
+
+.content {  
+  display: none;
+}
+
+.no-js .content,
+.content--active {
+  display: block;
+}
+
+/*
+ * Hide from both screenreaders and browsers: h5bp.com/u
+ */
+
+.hidden {
+    display: none !important;
+    visibility: hidden;
+}
+
+/*
+ * Hide only visually, but have it available for screenreaders: h5bp.com/v
+ */
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
