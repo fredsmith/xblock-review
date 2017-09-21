@@ -3,7 +3,7 @@ body {
   margin: 2em;
 }
 
-.button {
+.review-button {
   background-color: transparent;
   border: none;
   font-size: 1.47em;
@@ -12,54 +12,30 @@ body {
   padding: .2em .5em .2em 0;
 }
 
-.button:focus {
+.review-button:focus {
   background-color: #eee;
 }
-.button--active,
-.button--active:focus{
+.review-button--active,
+.review-button--active:focus{
   background-color: #ccc;
 }
 
-.button:before {
+.review-button:before {
   content: "+";
   display: inline-block;
   width: 1em;
 }
 
-.button--active:before {
+.review-button--active:before {
   content: "-";
 } 
 
-.content {  
+.review-content {
   display: none;
   width: 100%;
 }
 
-.no-js .content,
-.content--active {
+.no-js .review-content,
+.review-content--active {
   display: block;
-}
-
-/*
- * Hide from both screenreaders and browsers: h5bp.com/u
- */
-
-.hidden {
-    display: none !important;
-    visibility: hidden;
-}
-
-/*
- * Hide only visually, but have it available for screenreaders: h5bp.com/v
- */
-
-.visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px;
 }

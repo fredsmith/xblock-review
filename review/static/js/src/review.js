@@ -1,35 +1,55 @@
 /* Javascript for ReviewXBlock. */
 function ReviewXBlock(runtime, element) {
   $(function ($) {
-    /* Here's where you'd do things on page load. */
     'use strict'
 
-    $('.button').on('click', function(event) {
+    $('.review-button').on('click', function(event) {
       var $btn = $(event.currentTarget),
-          $content = $btn.siblings('.content'),
+          $content = $btn.siblings('.review-content'),
           $iframe = $content.find('iframe');
 
-      if ($iframe.attr('src') === '') {
-          $iframe.attr('src', $btn.attr('data-iframe-src'));
+      if (!$btn.attr('disabled')) {
+        // Prevents double clicking which caused issues from seeing the problems
+        $btn.attr('disabled', true);
+
+        setTimeout(function() {
+          $btn.attr('disabled', false);
+        }, 100);
+
+        // iFrame loads after the button is clicked so there is not
+        // a large amount of loading upon going to the xBlock
+        if ($iframe.attr('src') === '') {
+          $iframe.attr('src', $btn.data('iframe-src'));
+        }
+
+        // Dynamically changes the height of the iFrame to the size of
+        // the content inside
+        if ($btn.attr('class').includes('review-button--active')) {
+          clearInterval($btn.data('intervalID'));
+        } else {
+          $btn.data('intervalID', setInterval(function() {
+            $iframe.attr('height', $iframe['0'].contentWindow.document.body.offsetHeight + 'px');
+          }, 1000));
+        }
+
+        // Toggle active state (+/-)
+        $btn.toggleClass('review-button--active');
+
+        // Toggle ARIA property
+        // https://gist.github.com/toddmotto/bbb704d88cf39b06dbe0
+        $btn.attr('aria-expanded', $btn.attr('aria-expanded') === 'true' ? 'false' : 'true');
+
+        // Toggle active state (show/hide)
+        $content.toggleClass('review-content--active');
       }
-
-      // Toggle active state (+/-)
-      $btn.toggleClass('button--active');
-
-      // Toggle ARIA property
-      // https://gist.github.com/toddmotto/bbb704d88cf39b06dbe0
-      $btn.attr('aria-expanded', $btn.attr('aria-expanded') === 'true' ? 'false' : 'true');
-
-      // Toggle active state (show/hide)
-      $content.toggleClass('content--active');
     });
 
-    $('.button').on('focus', function(event) {
+    $('.review-button').on('focus', function(event) {
       var $btn = $(event.currentTarget);
         $btn.attr('aria-selected', 'true');
     });
 
-    $('.button').on('blur', function(event) {
+    $('.review-button').on('blur', function(event) {
       var $btn = $(event.currentTarget);
         $btn.attr('aria-selected', 'false');
     });

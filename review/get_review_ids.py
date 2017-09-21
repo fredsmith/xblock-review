@@ -9,6 +9,7 @@ from opaque_keys.edx.locator import CourseLocator
 from enrollment.api import get_enrollment, add_enrollment, update_enrollment
 import crum
 import random
+import json
 
 log = logging.getLogger(__name__)
 
@@ -23,6 +24,9 @@ ENROLLMENT_COURSE_MAPPING = {
 
 
 def get_records(num_desired, current_course):
+    '''
+    Doc String
+    '''
     user = crum.get_current_user()
     enrollment_course_id = ENROLLMENT_COURSE_MAPPING[str(current_course)]
     enrollment_status = get_enrollment(user.username, enrollment_course_id)
@@ -33,6 +37,7 @@ def get_records(num_desired, current_course):
     problem_ids = []
     for record in StudentModule.objects.filter(**{'student_id': user.id, 'course_id': current_course, 'module_type': 'problem'}):
         # Actual logic regarding the record should go here
+        state = json.loads(record.state)
         problem = str(record.module_state_key).split("@")
         problem_ids.append(problem[-1])
     problems_to_show = random.sample(problem_ids, num_desired)
