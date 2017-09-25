@@ -63,9 +63,8 @@ class ReviewXBlock(XBlock):
         frag.initialize_js('ReviewXBlock')
         return frag
 
-    def studio_view(self, _context):
-        frag = self.student_view(_context)
-        return frag
+    def studio_view(self, context):
+        return self.student_view(context)
 
     @property
     def non_editable_metadata_fields(self):

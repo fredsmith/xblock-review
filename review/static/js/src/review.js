@@ -32,6 +32,16 @@ function ReviewXBlock(runtime, element) {
           }, 1000));
         }
 
+        // Possible way to check if the iFrame loaded got a 404
+        if ($iframe['0'].innerHTML) {
+          var title = $iframe['0'].contentDocument.title.toLowerCase();
+          if (title.indexOf("page not found")>=0 || title.indexOf("404")>=0) {
+            // I would like to change the HTML to display some other message. Not sure if possible
+            // $iframe.attr('src', '');
+          }
+        } else {
+        }
+
         // Toggle active state (+/-)
         $btn.toggleClass('review-button--active');
 

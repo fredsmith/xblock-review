@@ -45,13 +45,34 @@ def get_records(num_desired, current_course):
     # Each record corresponds to a problem the user has loaded
     # in the original course
     for record in StudentModule.objects.filter(**{'student_id': user.id, 'course_id': current_course, 'module_type': 'problem'}):
-        # Actual logic regarding the record should go here
-        state = json.loads(record.state)
-
         # record.module_state_key takes the form: 
         # block-v1:{course_id}+type@problem+block@{problem_id}
         problem_id = str(record.module_state_key).split("@")[-1]
-        problem_ids.append(problem_id)
+
+        '''
+        Won't show a review problem to a learner if the learner
+        has already correctly answered the review problem.
+
+        Catches IndexError if learner has never seen the review problem before.
+        Catches KeyError if learner has never attempted the review problem before.
+        '''
+        try:
+            review_record = StudentModule.objects.filter(**{'student_id': user.id,
+                'module_state_key': UsageKey.from_string(
+                    'block-v1:'+REVIEW_COURSE_MAPPING[str(current_course)]+
+                    '+type@problem+block@'+problem_id)})[0]
+            review_record_state = json.loads(review_record.state)
+            for key in review_record_state["correct_map"].keys():
+                # If any part of a problem was incorrect,
+                # it is eligible to be shown again
+                if review_record_state["correct_map"][key]["correctness"] != 'correct':
+                    problem_ids.append(problem_id)
+                    break
+        except (IndexError, KeyError):
+            problem_ids.append(problem_id)
+
+        # Actual logic regarding the record should go here
+        state = json.loads(record.state)
 
     if len(problem_ids) < num_desired:
         return []
