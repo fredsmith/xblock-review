@@ -8,12 +8,12 @@ function ReviewXBlock(runtime, element) {
           $content = $btn.siblings('.review-content'),
           $iframe = $content.find('iframe');
 
-      if (!$btn.attr('disabled')) {
+      if (!$btn.hasClass('disable-click')) {
         // Prevents double clicking which caused issues from seeing the problems
-        $btn.attr('disabled', true);
+        $btn.addClass('disable-click');
 
         setTimeout(function() {
-          $btn.attr('disabled', false);
+          $btn.removeClass('disable-click');
         }, 100);
 
         // iFrame loads after the button is clicked so there is not
