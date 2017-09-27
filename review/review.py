@@ -2,7 +2,7 @@
 
 import pkg_resources
 from xblock.core import XBlock
-from xblock.fields import String, Scope
+from xblock.fields import Integer, String, Scope
 from xblock.fragment import Fragment
 
 from get_review_ids import get_records
@@ -50,6 +50,7 @@ class ReviewXBlock(XBlock):
             html = self.resource_string("static/html/no_review.html")
         else:
             html = self.resource_string("static/html/review.html")
+            html = html.format(NUMBER_DESIRED=self.num_desired)
             for i in xrange(self.num_desired):
                 content = self.resource_string("static/html/review_content.html")
                 content = content.format(PROBLEM_URL=self.url_list[i], INDEX=(i+1))
