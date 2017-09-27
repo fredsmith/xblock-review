@@ -24,12 +24,19 @@ class ReviewXBlock(XBlock):
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
 
-    # TO-DO: define your own fields.
     display_name = String(
         display_name=_("Display Name"),
         help=_("The display name for this component."),
         scope=Scope.settings,
         default=_("Review"),
+    )
+
+    num_desired = Integer(
+        display_name=_("Number of desired review problems"),
+        help=_("Defines the number of problems the review module will display "
+               "to the learner."),
+        default=5,
+        scope=Scope.user_state_summary
     )
 
     def resource_string(self, path):
@@ -38,17 +45,17 @@ class ReviewXBlock(XBlock):
         return data.decode("utf8")
 
     def get_html(self):
-        url_list = get_records(5, self.course_id)
-        if len(url_list) != 5:
+        url_list = get_records(self.num_desired, self.course_id)
+        if len(url_list) != self.num_desired:
             html = self.resource_string("static/html/no_review.html")
         else:
             html = self.resource_string("static/html/review.html")
-            html = html.format(self=self,
-                            PROBLEM_URL_0=url_list[0],
-                            PROBLEM_URL_1=url_list[1],
-                            PROBLEM_URL_2=url_list[2],
-                            PROBLEM_URL_3=url_list[3],
-                            PROBLEM_URL_4=url_list[4])
+            for i in xrange(self.num_desired):
+                content = self.resource_string("static/html/review_content.html")
+                content = content.format(PROBLEM_URL=self.url_list[i], INDEX=(i+1))
+                html += content
+            # Need to close out the div from the original review.html
+            html += '</div>'
         return html
 
     def student_view(self, context=None):

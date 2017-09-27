@@ -62,15 +62,5 @@ function ReviewXBlock(runtime, element) {
         $content.toggleClass('review-content--active');
       }
     });
-
-    $('.review-button').on('focus', function(event) {
-      var $btn = $(event.currentTarget);
-        $btn.attr('aria-selected', 'true');
-    });
-
-    $('.review-button').on('blur', function(event) {
-      var $btn = $(event.currentTarget);
-        $btn.attr('aria-selected', 'false');
-    });
   });
 }
