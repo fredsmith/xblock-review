@@ -1,0 +1,17 @@
+language: python
+
+install:
+  make requirements
+
+script:
+  make test
+
+deploy:
+  provider: pypi
+  user: edx
+  distributions: sdist bdist_wheel
+  on:
+    tags: true
+    python: 2.7
+  password:
+    secure: HRlNKOHOB4iAPlyx+1LtCHFjhc7iclZzS70Gry7P3wqWU8UCcy3m7EGJeqITRYjP3QuCiRFkZBQ6qQeWcw9dfR3GX9aYJV5tVhDm14HhmN70zhAlYrJ+/PrsMnjcbj2tnPNvKKFAvraUcxbKeOcvTTh+Vo0LXTcH9a5pTXxzJN8RUeZndXElM4vwcqTjBHb4KHz52sfhzOyr0xj91egpgzkJeZzIBFpOpWbVzHdaYeTZmXE+CMxig1O55yRd32YhzjqWjN18aGLKz6FdpXCWV7PvezuoQxzJxcoP5iQ3bQ40A4VSZCuwE4x1+mr6HV74F2NbdhAoDhOKBlp+rgVRqYA/snAXaHmP3aQXBPVnW4YDELOflZfcDGDiegZXGtzu694+AcAeI2aI09Ga49K77Vg9Pa1y1S/BOCiY4MU6ZokrkNRyBHnqQVGduwOZi2XQbfafr29UPZoWFJvgYYoB+FApueF45i3bo1ecy7JTb9cw/ghvz3VfBKXSmf1nnXeJxebee1UtS8SP8fDwVpdO+H+bjGiTeQ13qf3Q6R998vulWEWtAe37pJtbBTZoEoWrKug78u7qH6Zc+7h4M2ZMkjGB0lE5bFLhzHWCSvQLqx48a38qUYtq7dvYxjbYpDGCOdFyu4EOgI3Uq59kW4zh16bNEUatnqxcZOrRj2HkOVw=

@@ -1,0 +1,40 @@
+/* CSS for ReviewXBlock */
+body {
+  margin: 2em;
+}
+
+.review-button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.47em;
+  font-weight: bold;
+  margin: 5px;
+  padding: .2em .5em .2em 0;
+}
+
+.review-button:focus {
+  background-color: #eee;
+}
+.review-button--active,
+.review-button--active:focus{
+  background-color: #ccc;
+}
+
+.review-button-icon:before {
+  content: "+";
+  display: inline-block;
+  width: 1em;
+}
+
+.review-button--active .review-button-icon:before {
+  content: "-";
+} 
+
+.review-content {
+  display: none;
+  width: 100%;
+}
+
+.review-content--active {
+  display: block;
+}

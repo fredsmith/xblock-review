@@ -1,0 +1,3 @@
+{% load i18n %}
+<h3 class="hd hd-2">{% trans "Nothing to review" as msg %}{{ msg | force_escape }}</h3>
+<p>{% trans "Oh no! You have not interacted with enough problems yet to have any to review. Go back and try more problems so you have content to review." as msg %}{{ msg | force_escape }}</p>

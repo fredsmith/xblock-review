@@ -1,0 +1,9 @@
+{% load i18n %}
+<h3 class="hd hd-2">{% trans "Review Component" as msg %}{{ msg | force_escape }}</h3>
+<p>
+  {% filter force_escape %}
+    {% blocktrans %}
+      Below are {{ number_desired }} review problems for you to try out and see how well you have mastered the material of this class.
+    {% endblocktrans %}
+  {% endfilter %}
+</p>
