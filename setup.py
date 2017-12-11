@@ -24,7 +24,7 @@ long_description = open(os.path.join(os.path.dirname(__file__), 'README.rst')).r
 
 setup(
     name='xblock-review',
-    version='1.1.2',
+    version='1.1.3',
     description='The Review XBlock is designed to act as a review tool for learners in their edX course.',
     long_description = long_description,
     license='AGPL v3',

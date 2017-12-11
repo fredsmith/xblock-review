@@ -49,16 +49,20 @@ def get_problems(num_desired, current_course):
     store = modulestore()
     course_usage_key = store.make_course_usage_key(current_course)
     course_blocks = get_course_blocks(user, course_usage_key)
+    review_course = current_course.replace(course=current_course.course+'_review')
+    review_course_usage_key = store.make_course_usage_key(review_course)
+    review_course_blocks = get_course_blocks(user, review_course_usage_key)
 
     problem_data = []
 
     for block_key, state in get_records(user, current_course):
         block_key = block_key.replace(course_key=store.fill_in_run(block_key.course_key))
-        if is_valid_problem(store, block_key, state, course_blocks):
+        review_block_key = block_key.replace(course=block_key.course+'_review')
+        if is_valid_problem(store, block_key, state, course_blocks, review_block_key, review_course_blocks):
             correct, attempts = get_correctness_and_attempts(state)
             problem_id = block_key.block_id
             problem_data.append((problem_id, correct, attempts))
-            delete_state_of_review_problem(user, current_course, problem_id)
+            delete_state_of_review_problem(user, review_course, review_block_key)
 
     if len(problem_data) < num_desired:
         return []
@@ -90,12 +94,16 @@ def get_vertical(current_course):
     store = modulestore()
     course_usage_key = store.make_course_usage_key(current_course)
     course_blocks = get_course_blocks(user, course_usage_key)
+    review_course = current_course.replace(course=current_course.course+'_review')
+    review_course_usage_key = store.make_course_usage_key(review_course)
+    review_course_blocks = get_course_blocks(user, review_course_usage_key)
 
     vertical_data = set()
 
     for block_key, state in get_records(user, current_course):
         block_key = block_key.replace(course_key=store.fill_in_run(block_key.course_key))
-        if is_valid_problem(store, block_key, state, course_blocks):
+        review_block_key = block_key.replace(course=block_key.course+'_review')
+        if is_valid_problem(store, block_key, state, course_blocks, review_block_key, review_course_blocks):
             # If the block_key does not have a subsection (sequential) in it's tree,
             # we should skip it.
             subsection = course_blocks.get_transformer_block_field(
@@ -127,7 +135,7 @@ def get_vertical(current_course):
                     continue
 
                 vertical_data.add(vertical.block_id)
-                delete_state_of_review_problem(user, current_course, block_key.block_id)
+                delete_state_of_review_problem(user, review_course, review_block_key)
 
     if not vertical_data:
         return []
@@ -182,7 +190,7 @@ def enroll_user_in_review_course_if_needed(user, current_course):
         update_enrollment(user.username, enrollment_course_id, is_active=True)
 
 
-def delete_state_of_review_problem(user, current_course, problem_id):
+def delete_state_of_review_problem(user, review_course, review_key):
     '''
     Deletes the state of a review problem so it can be used infinitely
     many times.
@@ -192,8 +200,6 @@ def delete_state_of_review_problem(user, current_course, problem_id):
         current_course (CourseLocator): The course the learner is currently in
         problem_id (str): The problem id whose state should be cleared
     '''
-    review_course = current_course.replace(course=current_course.course+'_review')
-    review_key = review_course.make_usage_key('problem', problem_id)
     try:
         module_to_delete = StudentModule.objects.get(
             student_id=user.id,
@@ -234,7 +240,7 @@ def get_correctness_and_attempts(state):
     return (correct, attempts)
 
 
-def is_valid_problem(store, block_key, state, course_blocks):
+def is_valid_problem(store, block_key, state, course_blocks, review_block_key, review_course_blocks):
     '''
     Checks a problem to see if it is valid to show to the learner. The
     reason to have this is so learners don't try to cheat by using the
@@ -261,7 +267,7 @@ def is_valid_problem(store, block_key, state, course_blocks):
 
     Returns True if the problem is valid, False otherwise
     '''
-    if block_key not in course_blocks:
+    if block_key not in course_blocks or review_block_key not in review_course_blocks:
         return False
 
     problem = store.get_item(block_key)
