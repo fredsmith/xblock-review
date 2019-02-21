@@ -1,2 +1,2 @@
-tox-battery==0.4
-tox==2.7.0
+tox-battery==0.5.1
+tox==3.7.0
