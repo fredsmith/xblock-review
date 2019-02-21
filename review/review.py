@@ -5,6 +5,8 @@ import logging
 
 import pkg_resources
 
+from six.moves import xrange
+
 from xblock.core import XBlock
 from xblock.fields import Integer, Scope, String
 from xblock.fragment import Fragment
