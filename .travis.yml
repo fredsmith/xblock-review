@@ -1,9 +1,14 @@
 language: python
 
+env:
+  - TOXENV=quality
+
 matrix:
   include:
   - python: 2.7
-    env: TOXENV=quality
+  - python: 3.6
+  - python: 3.7
+    dist: xenial  # required for Python >= 3.7 (travis-ci/travis-ci#9069)
 
 install:
   make requirements
