@@ -15,8 +15,8 @@ import logging
 import random
 from datetime import datetime
 
-import crum
 import pytz
+import crum
 from courseware.models import StudentModule
 from enrollment.api import add_enrollment, get_enrollment, update_enrollment
 from lms.djangoapps.course_blocks.api import get_course_blocks
